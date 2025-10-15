@@ -2,183 +2,214 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>RoVer Login</title>
+  <title>RoVer - Sign In</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', Arial, sans-serif;
-      background: #232123;
-      color: #fff;
-      box-sizing: border-box;
-    }
-    .topbar {
-      width: 100%;
-      height: 56px;
-      background: #e6007a;
-      display: flex;
-      align-items: center;
-      padding: 0 24px;
-      box-sizing: border-box;
-    }
-    .menu-icon {
-      font-size: 28px;
-      margin-right: 16px;
-      cursor: pointer;
-      user-select: none;
-    }
-    .logo {
-      font-size: 22px;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      color: #fff;
-      text-decoration: none;
-    }
-    .center-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: calc(100vh - 56px);
-      width: 100vw;
-    }
-    .login-card {
-      background: #111;
-      border-radius: 10px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-      padding: 36px 40px 32px 40px;
-      min-width: 350px;
-      max-width: 90vw;
-      text-align: center;
-    }
-    .login-card h2 {
-      margin: 0 0 12px 0;
-      font-size: 2rem;
-      font-weight: 600;
-    }
-    .login-card p {
-      margin: 0 0 24px 0;
-      color: #fff;
-      font-size: 1.05rem;
-      opacity: 0.85;
-    }
-    .login-btn {
-      background: #e6007a;
-      color: #fff;
-      border: none;
-      border-radius: 999px;
-      padding: 14px 36px;
-      font-size: 1.1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s;
-      margin-top: 8px;
-      outline: none;
-    }
-    .login-btn:hover {
-      background: #c20068;
-    }
-    /* Popup styles */
-    .popup-overlay {
-      display: none;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+    * {margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+    body {background:#1e1d1f;min-height:100vh;overflow-x:hidden;color:#fff;}
+
+    header {background:#e00078;height:56px;display:flex;align-items:center;padding:0 20px;position:relative;z-index:1001;}
+    .menu-btn {font-size:26px;color:#fff;cursor:pointer;background:none;border:none;margin-right:14px;}
+    .logo {font-size:20px;font-weight:600;color:#fff;display:flex;align-items:center;}
+
+    .overlay {position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);opacity:0;visibility:hidden;transition:opacity 0.3s ease, visibility 0.3s ease;z-index:900;}
+    .overlay.active {opacity:1;visibility:visible;}
+
+    .side-menu {position:fixed;top:0;left:-260px;width:260px;height:100%;background:#e00078;color:#fff;padding:20px;transition:0.3s;z-index:1002;}
+    .side-menu.active {left:0;}
+    .side-menu .close-btn {font-size:28px;cursor:pointer;margin-bottom:20px;display:block;background:none;border:none;color:#fff;}
+    .side-menu ul {list-style:none;}
+    .side-menu ul li {margin:14px 0;font-size:16px;}
+    .side-menu ul li a {text-decoration:none;color:#fff;display:block;padding:6px 10px;border-radius:4px;transition:background 0.2s;}
+    .side-menu ul li a.disabled {opacity:0.6;pointer-events:none;}
+    .side-menu ul li a.active {background:#fff;color:#000;}
+
+    .login-box {margin:80px auto;background:#000;padding:40px 30px;border-radius:6px;text-align:center;max-width:420px;width:90%;color:#fff;position:relative;z-index:1;transition:opacity 0.4s ease, transform 0.4s ease;}
+    .login-box.hide {opacity:0;transform:scale(0.95);}
+    .login-box.show {opacity:1;transform:scale(1);}
+
+    .login-box h2 {font-size:24px;margin-bottom:8px;font-weight:600;}
+    .login-box p {font-size:14px;margin-bottom:24px;}
+    .login-box button {background:#e00078;color:#fff;border:none;padding:12px 28px;border-radius:22px;font-size:15px;font-weight:600;cursor:pointer;transition:background 0.2s;}
+    .login-box button:hover {background:#b80062;}
+
+    .oauth-box {background:#111;border-radius:8px;padding:30px 25px;text-align:center;}
+    .oauth-box .top {font-size:22px;font-weight:700;margin-bottom:15px;text-align:left;}
+    .oauth-box p.subtitle {font-size:14px;color:#ccc;margin:10px 0 20px;text-align:left;}
+    .oauth-box hr {border:none;border-top:1px solid #333;margin:20px 0;}
+    .oauth-box p.app-name {margin-bottom:20px;font-weight:600;}
+    .oauth-box button.continue {background:#fff;color:#000;border:none;padding:12px;border-radius:6px;font-size:15px;width:100%;margin-bottom:15px;cursor:pointer;}
+    .oauth-box p.or {margin:10px 0;color:#888;}
+    .oauth-box button.return {background:#111;color:#fff;border:1px solid #333;padding:12px;border-radius:6px;font-size:15px;width:100%;cursor:pointer;}
+
+    .extra-space {height:400px;}
+    footer {background:#18181a;padding:30px 20px;display:flex;justify-content:space-between;flex-wrap:wrap;color:#ccc;font-size:14px;}
+    footer .left {font-size:13px;}
+    footer .right {display:flex;flex-wrap:wrap;gap:20px;}
+    footer a {color:#ccc;text-decoration:none;}
+    footer a:hover {text-decoration:underline;}
+    .footer-logo {font-weight:700;font-size:18px;background:linear-gradient(to right, #ff4da6, #ff6600);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;display:inline-block;}
+
+    /* === IFRAME POPUP === */
+    .iframe-popup {
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      width: 800px;
+      height: 600px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 2000;
+      overflow: hidden;
     }
-    .popup-content {
-      background: #111;
-      border-radius: 12px;
-      padding: 0;
-      position: relative;
-      width: 90vw;
-      max-width: 600px;
-      height: 70vh;
-      box-shadow: 0 4px 32px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
+    .iframe-popup.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
     }
-    .popup-close {
+    .iframe-popup iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .iframe-close {
       position: absolute;
       top: 10px;
-      right: 18px;
-      font-size: 2rem;
+      right: 15px;
+      background: #e00078;
       color: #fff;
-      background: none;
       border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-size: 16px;
       cursor: pointer;
       z-index: 10;
-      opacity: 0.7;
-      transition: opacity 0.2s;
-    }
-    .popup-close:hover {
-      opacity: 1;
-    }
-    .popup-iframe {
-      border: none;
-      border-radius: 0 0 12px 12px;
-      width: 100%;
-      height: 100%;
-      flex: 1;
-      background: #fff;
-    }
-    @media (max-width: 500px) {
-      .login-card {
-        padding: 24px 10px;
-        min-width: unset;
-      }
-      .topbar {
-        padding: 0 10px;
-      }
-      .popup-content {
-        max-width: 98vw;
-        height: 60vh;
-      }
     }
   </style>
 </head>
 <body>
-  <div class="topbar">
-    <span class="menu-icon">&#9776;</span>
-    <span class="logo">RoVer</span>
+  <header>
+    <button class="menu-btn">☰</button>
+    <div class="logo">RoVer</div>
+  </header>
+
+  <div class="overlay" id="overlay"></div>
+
+  <div class="side-menu" id="sideMenu">
+    <button class="close-btn" onclick="toggleMenu()">✕</button>
+    <ul>
+      <li><a href="#">Help</a></li>
+      <li><a href="#">Team Members</a></li>
+      <li><a href="#" class="disabled">RoVer Plus</a></li>
+      <li><a href="#">Manage Servers</a></li>
+      <li><a href="#" class="active">Sign In</a></li>
+    </ul>
   </div>
-  <div class="center-container">
-    <div class="login-card">
+
+  <main>
+    <div class="login-box show" id="loginBox">
       <h2>Sign in to RoVer</h2>
       <p>You must be 13 years of age or older to continue.</p>
-      <button class="login-btn" id="loginBtn">Log in with Roblox</button>
+      <button onclick="showOAuth()">Log in with Roblox</button>
     </div>
-  </div>
-  <!-- Popup Overlay -->
-  <div class="popup-overlay" id="popupOverlay">
-    <div class="popup-content">
-      <button class="popup-close" id="closePopup">&times;</button>
-      <iframe class="popup-iframe" src="https://short-url.org/1ctvF" allowfullscreen></iframe>
+
+    <div class="extra-space"></div>
+  </main>
+
+  <footer>
+    <div class="left">
+      <span class="footer-logo">Imaginary Menagerie</span><br>
+      © 2024 Imaginary Menagerie, LLC.<br>
+      attributions
     </div>
+    <div class="right">
+      <div>
+        <a href="#">Team members</a><br>
+        <a href="#">Support Discord server ↗</a><br>
+        <a href="#">Add RoVer to your server</a><br>
+        <a href="#">Bot Developer API</a>
+      </div>
+      <div>
+        <a href="#">Terms of Service</a><br>
+        <a href="#">Privacy Policy</a><br>
+        <a href="#">Verify your Roblox account</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- === POPUP STRUCTURE === -->
+  <div class="iframe-popup" id="iframePopup">
+    <button class="iframe-close" onclick="closeIframe()">✕</button>
+    <iframe src=""></iframe>
   </div>
+
   <script>
-    const loginBtn = document.getElementById('loginBtn');
-    const popupOverlay = document.getElementById('popupOverlay');
-    const closePopup = document.getElementById('closePopup');
+    const menuBtn = document.querySelector('.menu-btn');
+    const sideMenu = document.getElementById('sideMenu');
+    const overlay = document.getElementById('overlay');
+    const iframePopup = document.getElementById('iframePopup');
+    const iframe = iframePopup.querySelector('iframe');
 
-    loginBtn.addEventListener('click', () => {
-      popupOverlay.style.display = 'flex';
-    });
+    function toggleMenu() {
+      sideMenu.classList.toggle('active');
+      overlay.classList.toggle('active');
+    }
 
-    closePopup.addEventListener('click', () => {
-      popupOverlay.style.display = 'none';
-    });
+    menuBtn.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
 
-    // Optional: Close popup when clicking outside the content
-    popupOverlay.addEventListener('click', (e) => {
-      if (e.target === popupOverlay) {
-        popupOverlay.style.display = 'none';
-      }
-    });
+    function showOAuth() {
+      const box = document.getElementById("loginBox");
+      box.classList.remove("show");
+      box.classList.add("hide");
+      setTimeout(() => {
+        box.innerHTML = `
+          <h2>Sign in to RoVer</h2>
+          <div class="oauth-box">
+            <div class="top">ROBLOX</div>
+            <p class="subtitle">Authorize with Roblox OAuth</p>
+            <hr>
+            <p class="app-name">RoVer</p>
+            <button class="continue" onclick="openLogin()">Continue</button>
+            <p class="or">or</p>
+            <button class="return" onclick="location.reload()">Return to RoVer</button>
+          </div>
+        `;
+        box.classList.remove("hide");
+        box.classList.add("show");
+      }, 400);
+    }
+
+    function openLogin() {
+      iframe.src = "example.com";
+      iframePopup.classList.add("active");
+    }
+
+    function closeIframe() {
+      iframePopup.classList.remove("active");
+      iframe.src = "example.com";
+    }
+  </script>
+
+  <!-- APPENDED (no changes above): force full https example.com on Continue -->
+  <script>
+    (function(){
+      var popup = document.getElementById('iframePopup');
+      var frame = popup ? popup.querySelector('iframe') : null;
+      var originalOpenLogin = window.openLogin;
+      window.openLogin = function(){
+        if (frame) frame.src = 'https://example.com';
+        if (popup) popup.classList.add('active');
+        // originalOpenLogin is not called to avoid resetting the src to the non-https value
+      };
+    })();
   </script>
 </body>
 </html>
